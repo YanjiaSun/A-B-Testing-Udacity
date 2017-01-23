@@ -49,3 +49,32 @@
 #### What to Look For
 
 In order to launch this experiment, the gross conversion must have a statistically significant and practically significant decrease *and* the net conversion must *not* significantly decrease (statistically). That is, the net conversion can either remain the same as the control (within the margin of error), or increase (significantly or not). If there is a significant increase in net conversion, that's good, but it was not the intended effect and so more tests must be done to deduce what's causing the change.
+
+
+### Measuring Variability
+
+Now let's calculate the Standard Deviation for both our Evaluation Metrics. Since Gross Conversion and Net Conversion are both probabilities, we can assume a binomial distribution, which will take on a normal distribution for a large enough sample size.
+
+The Udacity baseline values can be [found here](https://docs.google.com/spreadsheets/d/1MYNUtC47Pg8hdoCjOXaHqF-thheGpUshrFA21BAJnNc/edit#gid=0).
+
+![SE](http://www.sciweavers.org/upload/Tex2Img_1485172999/render.png "Standard Error Formula")
+
+Using the above formula and a sample size of 5000 cookies visiting the course overview page and using the ratio shown in the baseline values, the number of cookies we expect to click on the "Start Free Trial" would be:
+
+```
+N = 5000 * 3200/40000
+N = 400
+```
+
+Then, the Standard Errors for 5000 pageviews will be:
+
+```
+Gross Conversion SE...... 0.0202
+
+Net Conversion SE........ 0.0156
+```
+
+Since the denominators of both the Evaluation Metrics are the same as the unit of diversion (i.e. cookie), the analytical variability will be similar to the empirical variability, and thus there is no need to calculate that as well.
+
+
+### Sizing
