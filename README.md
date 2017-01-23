@@ -74,7 +74,47 @@ Gross Conversion SE...... 0.0202
 Net Conversion SE........ 0.0156
 ```
 
-Since the denominators of both the Evaluation Metrics are the same as the unit of diversion (i.e. cookie), the analytical variability will be similar to the empirical variability, and thus there is no need to calculate that as well.
+Since the denominators of both the Evaluation Metrics are the same as the unit of diversion (i.e. cookie), the analytical variability will be similar to the empirical variability, and thus there is no need to calculate the latter as well.
 
 
 ### Sizing
+
+#### Number of Samples vs Power
+
+Since there are multiple tests being done, the chance of a rare event in the confidence interval increases. The Bonferroni correction compensates for that increase, but at the cost of increasing the probability of producing false positives (reducing statistical power), and can be conservative if there are large number of tests and/or the test statistics are positively correlated.
+
+In our case, there are only two tests, so the chance of a rare event is not increased by a lot. Also, the tests are correlated, so the Bonferroni correction will come up conservative. For these reasons, I'm not going to use the Bonferroni correction.
+
+Using [this online calculator](http://www.evanmiller.org/ab-testing/sample-size.html), we can calculate how large our sample size needs to be:
+```
+Gross Conversion:
+    Base conversion rate = 20.625%
+    Practical significance boundary = 1%
+    ...
+    Sample size: 25,835
+
+Net Conversion:
+    Base conversion rate = 10.93125%
+    Practical significance boundary = 0.75%
+    ...
+    Sample size: 27,413
+```
+
+Net Conversion's sample size covers Gross Conversion so let's select that. We know the click-through-probability on the "Start Free Trial" button is `0.08`, so now let's calculate the total number of pageviews per group, and then double that to get the total pageviews for both the control group and experiment group:
+
+```
+Pageviews (per group) = 27413 / 0.08
+                      = 342,662.5
+
+Total pageviews = 342662.5 * 2
+                = 685,325
+```
+
+#### Duration vs Exposure
+
+There are 40,000 unique cookies that view the course overview page each day, and our A/B Test needs a total of 685,325 pageviews. Since this experiment does not pose much of a risk, I'd divert 75% of the daily traffic (30,000 cookies) towards the experiment. This means the experiment will last roughly 23 days.
+
+The experiment does not impact existing users since they will not click the "Start Free Trial" button, and this is very important when determining the risk level of the experiment. Next, even within new visitors to the website (or repeating visitors who haven't signed up), it will not pose as a deterrence to motivated students with a pre-existing desire to complete the course (and hence put in a large number of hours per week). It only affects the decision process of the uncertain people clicking the "Start Free Trial" button, and even then, they might appreciate the honesty provided by the screener, and are unlikely to be offended by the experiment. For these reasons, the experiment poses minimal risk, and can be run over a large percentage of traffic. That being said, it's pragmatic not to run over all 100% of the traffic to avoid outlier cases and any potential bugs.
+
+
+## Experiment Analysis
