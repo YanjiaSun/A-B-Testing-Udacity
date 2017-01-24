@@ -118,3 +118,48 @@ The experiment does not impact existing users since they will not click the "Sta
 
 
 ## Experiment Analysis
+
+### Sanity Checks
+
+The first part of the analysis is to see if our invariant metrics are unchanged for both the control and experiment groups. The data for the control and experiment can be found [here](https://docs.google.com/spreadsheets/d/1Mu5u9GrybDdska-ljPXyBjTpdZIUev_6i7t4LRDfXM8/edit#gid=0).
+
+Getting the totals:
+```
+Number of cookies:
+    Total control pageviews........ 345543
+    Total experiment pageviews..... 344660
+    Total pageviews................ 690203
+    Expected probability...........    0.5
+
+Number of clicks:
+    Total control clicks........... 28378
+    Total experiment clicks........ 28325
+    Total clicks................... 56703
+    Expected probability...........   0.5
+
+Click-through-probability:
+    Observed CTP (control)......... 0.082126
+    Observed CTP (experiment)...... 0.082182
+    Pooled CTP..................... 0.082154
+```
+
+Click here to see a sample calculation.
+
+```
+Number of cookies:
+    Confidence interval............. [0.4988, 0.5012]
+    Observed value.................. 0.5006
+    Passed?......................... YES
+
+Number of clicks:
+    Confidence interval............. [0.4959, 0.5041]
+    Observed value.................. 0.5005
+    Passed?......................... YES
+
+Click-through-probability:
+    Confidence interval (of diff.).. [-0.001296, 0.001296]
+    Observed difference............. 0.00005663
+    Passed?......................... YES
+```
+
+### Result Analysis
