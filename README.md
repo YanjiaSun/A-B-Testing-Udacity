@@ -74,7 +74,7 @@ Gross Conversion SE...... 0.0202
 Net Conversion SE........ 0.0156
 ```
 
-Since the denominators of both the Evaluation Metrics are the same as the unit of diversion (i.e. cookie), the analytical variability will be similar to the empirical variability, and thus there is no need to calculate the latter as well.
+Since the denominators of both the Evaluation Metrics are the same as the unit of diversion (i.e. cookie), the analytical variability will be similar to the empirical variability, but let's calculate the latter as well.
 
 
 ### Sizing
@@ -143,7 +143,7 @@ Click-through-probability:
     Pooled CTP..................... 0.082154
 ```
 
-Click here to see a sample calculation.
+Click here to see a sample calculation for finding the 95% confidence intervals.
 
 ```
 Number of cookies:
@@ -163,3 +163,53 @@ Click-through-probability:
 ```
 
 ### Result Analysis
+
+Since our experiment has passed the sanity checks, let's see if the evaluation metrics are statistically and practically significant.
+
+Getting the totals:
+```
+Gross Conversion:
+    Total clicks (control).......... 17293
+    Total clicks (experiment)....... 17260
+    Total enrollments (control).....  3785
+    Total enrollments (experiment)..  3423
+
+Net Conversion:
+    Total clicks (control).......... 17293
+    Total clicks (experiment)....... 17260
+    Total payments (control)........  2033
+    Total payments (experiment).....  1945
+```
+
+Click here to see a sample calculation for finding the 95% confidence intervals.
+
+```
+Gross Conversion:
+    GC rate (control)............... 0.2189
+    GC rate (experiment)............ 0.1983
+    GC rate diff. (exp. - control).. -0.02055
+    Pooled GC rate.................. 0.2086
+    Pooled standard deviation....... 0.004372
+    ...
+    Confidence interval............. [-0.02912, -0.01199]
+    Practical significance boundary. 0.01
+    ...
+    ...
+    Statistically significant?...... YES
+    Practically significant?........ YES
+
+
+Net Conversion:
+    NC rate (control)............... 0.1176
+    NC rate (experiment)............ 0.1127
+    NC rate diff. (exp. - control).. -0.004874
+    Pooled NC rate.................. 0.1151
+    Pooled standard deviation....... 0.003434
+    ...
+    Confidence interval............. [-0.01160, 0.001857]
+    Practical significance boundary. 0.0075
+    ...
+    ...
+    Statistically significant?...... NO (which is okay)
+    Practically significant?........ YES
+```
