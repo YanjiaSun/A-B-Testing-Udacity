@@ -1,7 +1,5 @@
 # A/B Testing Udacity's Free Trial Screener
 
-## Abstract
-
 ## Experiment Overview
 >At the time of this experiment, Udacity courses currently have two options on the home page: "start free trial", and "access course materials". If the student clicks "start free trial", they will be asked to enter their credit card information, and then they will be enrolled in a free trial for the paid version of the course. After 14 days, they will automatically be charged unless they cancel first. If the student clicks "access course materials", they will be able to view the videos and take the quizzes for free, but they will not receive coaching support or a verified certificate, and they will not submit their final project for feedback.
 
@@ -37,7 +35,7 @@
 
   1. **Gross conversion**: Ideally, we hypothesize and want the screener to produce a lower conversion rate (because the people who were deterred by the screener are unlikely to make a payment and complete the course, hence freeing up coaching resources), but not at the cost of a lower net conversion rate.
 
-  2. **Net conversion**: While wanting a lower gross conversion rate, we do not want the screener to *significantly reduce* the number of students to continue past the free trial and eventually complete the course, which means the net conversation should either remain the same (within boundaries). A significantly higher net conversion is also advantageous. While that might be unexpected (and more tests must definitely be done to check), it is quite possible. For instance, students who are willing to put more than 5 hours per week might appreciate the honesty conveyed by the screener, and as a result trust Udacity and give the course a shot - the same students who might have left within the 14 days had the message not been there.
+  2. **Net conversion**: While wanting a lower gross conversion rate, we do not want the screener to *significantly reduce* the number of students to continue past the free trial and eventually complete the course, which means the net conversation should either remain the same (within boundaries), or increase. While a significantly higher net conversion might be unexpected (and more tests must definitely be done to check), it is quite possible. For instance, students who are willing to put more than 5 hours per week might appreciate the honesty conveyed by the screener, and as a result trust Udacity and give the course a shot - the same students who might have left within the 14 days had the message not been there.
 
 
 #### Unused metrics:
@@ -48,7 +46,7 @@
 
 #### What to Look For
 
-In order to launch this experiment, the gross conversion must have a statistically significant and practically significant decrease *and* the net conversion must *not* significantly decrease (statistically). That is, the net conversion can either remain the same as the control (within the margin of error), or increase (significantly or not). If there is a significant increase in net conversion, that's good, but it was not the intended effect and so more tests must be done to deduce what's causing the change.
+In order to launch this experiment, the gross conversion must have a statistically significant and practically significant decrease *and* the net conversion must *not* significantly decrease (statistically and practically). That is, the net conversion can either remain the same as the control (within the confidence interval), or increase (significantly or not). If there is a significant increase in net conversion, that's good, but it was not the intended effect and so more tests must be done to deduce what's causing the change.
 
 
 ### Measuring Variability
@@ -143,12 +141,12 @@ Click-through-probability:
     Pooled CTP..................... 0.082154
 ```
 
-Click here to see a sample calculation for finding the 95% confidence intervals.
+[Click here](https://i.imgsafe.org/8ebd8ef747.jpg) to see a sample calculation for finding the 95% confidence intervals.
 
 ```
 Number of cookies:
     Confidence interval............. [0.4988, 0.5012]
-    Observed value.................. 0.5006
+    Observed value.................. 0.4994
     Passed?......................... YES
 
 Number of clicks:
@@ -162,7 +160,11 @@ Click-through-probability:
     Passed?......................... YES
 ```
 
+All three Sanity Checks have passed!
+
 ### Result Analysis
+
+#### Effect Size Test
 
 Since our experiment has passed the sanity checks, let's see if the evaluation metrics are statistically and practically significant.
 
@@ -181,7 +183,7 @@ Net Conversion:
     Total payments (experiment).....  1945
 ```
 
-Click here to see a sample calculation for finding the 95% confidence intervals.
+[Click here](https://i.imgsafe.org/8ec03781b5.jpg) to see a sample calculation for finding the 95% confidence intervals.
 
 ```
 Gross Conversion:
@@ -211,5 +213,57 @@ Net Conversion:
     ...
     ...
     Statistically significant?...... NO (which is okay)
-    Practically significant?........ YES
+    Practically significant?........ NO
 ```
+
+For Gross Conversion, we want a statistically significant and practically significant *decrease*, which is what the calculations show. Zero is not a part of the confidence interval, and the upper bound is past the practical significance boundary. So Gross Conversion has PASSED.
+
+For Net Conversion, however, the situation is a bit tricky. We wanted the experiment to *not have* a significant decrease, which means that its definition of practical significance includes staying the same (i.e. no statistically significant difference in net conversion), or an increase. The calculations show that there is no statistical significant difference in net conversion, however the upper and lower bounds of the 95% confidence interval are both past the boundary for practical significance. This means that any interpretation of the data will be uncertain, and we do not have enough statistical power to draw a strong conclusion.
+
+#### Sign Tests
+
+The two-tailed p-values were calculated using [this online calculator](http://graphpad.com/quickcalcs/binomial2/)
+
+```
+Gross Conversion:
+    Number of successes.............  4
+    Number of trials................ 23
+    Probability..................... 0.5
+    Two-tailed p-value.............. 0.0026
+    ...
+    Statistically significant?...... YES
+
+Net Conversion:
+    Number of successes............. 10
+    Number of trials................ 23
+    Probability..................... 0.5
+    Two-tailed p-value.............. 0.6776
+    ...
+    Statistically significant?...... NO
+```
+
+#### Summary
+
+The Bonferroni correction was not used because the two evaluation metrics are co-related, and hence would have produced a conservative estimate. Also since there are only two metrics, the chances of a rare event occurring are not increased by a lot.
+
+Both the Effect Size Tests and Sign Tests have produced congruent results, both deeming Gross Conversion to be statistically significant and Net Conversion statistically insignificant. Additionally, the Effect Size Tests have also shown that Gross Conversion is practically significant, but Net Conversion is not.
+
+### Recommendation
+
+The experiment has caused Gross Conversion to significantly decrease both statistically and practically, which means it has succeeded in its first aspect which was to warn students about the course load so that they may reconsider joining the free trial, thereby freeing up coaching resources to students who are more likely to pay for the course. However, we are uncertain whether the experiment has had a significant decrease in Net Conversion or not, and for that reason, I recommend to **NOT LAUNCH** this experiment now, and instead create additional tests to determine whether Net Conversion has significantly decreased or not. Launching this experiment might cause a decrease in revenue from students paying for courses, and thus too risky a change. If it is not feasible to run more experiments and a decision must be made, I'd recommend seeking a business analyst to check whether the cost of the possible chance of lower number student payments is made up by the decrease in expenditure for the coaching resources.
+
+## Follow-Up Experiment
+
+A simple follow up experiment would be to play a short video to users who click the "Start Free Trial" button instead of the '5 hrs/week' screener. The rationale behind this is that a simple '5 hrs/week' might be logically sound, but doesn't *feel* like a lot of effort and doesn't convey the commitment required. For example, I might express 'Getting a Toned Body' as something that can be done with 6 hours per week, but it's evident, especially for those who have tried, that it takes a lot more effort than that. Not in terms of putting more hours, but in terms of putting those hours consistently for an extended period of time. So that's what I want to articulate to users planning on starting the course through the video: that it's going to take commitment to complete it.
+
+The video should be short - less than a minute long - so that it's not a drag. Content-wise, the video should express the exciting coursework and worthwhile challenges the students will face over said extended amount of time (4 months to a year depending on effort put): a short overview of the topics and projects presented by the various course instructors. More importantly, the video must contain success stories of students who have completed said course and then gone on to advance their careers. This is extremely important - crucial, I might add - because the students need a goal, or a reward, to incentivize them to put in the effort. Like with the fitness program the reward for the effort would be a toned body, there needs to be a significant reward that the students desire. A video alternating between course content and students who have completed the course and are now working in top companies might inspire students to not only take on the challenge, but see it through.
+
+**Hypothesis**: The Net Conversion will increase because the video will set clear goals and inspire students to complete the course.
+
+**Unit of Diversion**: Cookies.
+
+**Invariant Metrics**: Number of cookies; Number of clicks; Click-through-probability.
+
+**Evaluation Metrics**: Net Conversion
+
+The **unit of diversion** and the **invariant** and **evaluation metrics** are the same as the experiment analyzed above because it is similar in its purpose.
