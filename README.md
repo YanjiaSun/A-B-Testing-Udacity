@@ -40,7 +40,7 @@
 
 #### Unused metrics:
 
-  1. **Number of user-ids**: This is not a good invariant metric because it is expected to reduce as a result of the experiment. It is not a useful evaluation metric either because a lower number need not necessarily be a good sign unless partnered with other information, in which case the Gross conversion metric already covers this aspect (and more).
+  1. **Number of user-ids**: This is not a good invariant metric because it is expected to reduce as a result of the experiment. It is an applicable evaluation metric because it would record the number of students continue past the free trial, but it's not the best metric because it's not normalized (and Gross Conversion would be better).
 
   2. **Retention**: This one is more tricky. It's not an invariant metric because it is expected to change, but it's not a good evaluation metric either because the magnitude of change is dependent on the variant number of user-ids (and hence related to Gross conversion). If an experiment has a lower number of user-ids but the same retention rate as the control, that means the *total number* of users passing the free trial is more in the control. Therefore, a higher retention rate could mean that the *a similar number* of users are passing the free trial, and hence is not precise in its meaning. A high retention rate could lead to both a lower, similar, or higher net conversion, depending on the gross conversion. Another way of looking at is that retention is simply net conversion divided by gross conversion, and hence does not provide any meaningful information.
 
@@ -81,9 +81,10 @@ Since the denominators of both the Evaluation Metrics are the same as the unit o
 
 Since there are multiple tests being done, the chance of a rare event in the confidence interval increases. The Bonferroni correction compensates for that increase, but at the cost of increasing the probability of producing false positives (reducing statistical power), and can be conservative if there are large number of tests and/or the test statistics are positively correlated.
 
-In our case, there are only two tests, so the chance of a rare event is not increased by a lot. Also, the tests are correlated, so the Bonferroni correction will come up conservative. For these reasons, I'm not going to use the Bonferroni correction.
+I will not be using the Bonferroni correction for this experiment.
 
 Using [this online calculator](http://www.evanmiller.org/ab-testing/sample-size.html), we can calculate how large our sample size needs to be:
+
 ```
 Gross Conversion:
     Base conversion rate = 20.625%
@@ -112,7 +113,7 @@ Total pageviews = 342662.5 * 2
 
 There are 40,000 unique cookies that view the course overview page each day, and our A/B Test needs a total of 685,325 pageviews. Since this experiment does not pose much of a risk, I'd divert 75% of the daily traffic (30,000 cookies) towards the experiment. This means the experiment will last roughly 23 days.
 
-The experiment does not impact existing users since they will not click the "Start Free Trial" button, and this is very important when determining the risk level of the experiment. Next, even within new visitors to the website (or repeating visitors who haven't signed up), it will not pose as a deterrence to motivated students with a pre-existing desire to complete the course (and hence put in a large number of hours per week). It only affects the decision process of the uncertain people clicking the "Start Free Trial" button, and even then, they might appreciate the honesty provided by the screener, and are unlikely to be offended by the experiment. For these reasons, the experiment poses minimal risk, and can be run over a large percentage of traffic. That being said, it's pragmatic not to run over all 100% of the traffic to avoid outlier cases and any potential bugs.
+The experiment does not impact existing users since they will not click the "Start Free Trial" button, and this is very important when determining the risk level of the experiment. Next, even within new visitors to the website (or repeating visitors who haven't signed up), it will not pose as a deterrence to motivated students with a pre-existing desire to complete the course (and hence put in a large number of hours per week). It only affects the decision process of the uncertain people clicking the "Start Free Trial" button, and even then, they might appreciate the honesty provided by the screener, and are unlikely to be offended by the experiment. The experiment does not pose a physical, psychological, emotional, social or financial risk beyond those that they would encounter in normal daily life, and neither does it deal with sensitive data. Thus, the experiment does not exceed minimal risk. For these reasons, the experiment can be run over a large percentage of traffic. That being said, it's pragmatic not to run over all 100% of the traffic to avoid outlier cases and any potential bugs.
 
 
 ## Experiment Analysis
@@ -122,6 +123,7 @@ The experiment does not impact existing users since they will not click the "Sta
 The first part of the analysis is to see if our invariant metrics are unchanged for both the control and experiment groups. The data for the control and experiment can be found [here](https://docs.google.com/spreadsheets/d/1Mu5u9GrybDdska-ljPXyBjTpdZIUev_6i7t4LRDfXM8/edit#gid=0).
 
 Getting the totals:
+
 ```
 Number of cookies:
     Total control pageviews........ 345543
@@ -146,7 +148,7 @@ Click-through-probability:
 ```
 Number of cookies:
     Confidence interval............. [0.4988, 0.5012]
-    Observed value.................. 0.4994
+    Observed value.................. 0.5006
     Passed?......................... YES
 
 Number of clicks:
@@ -169,6 +171,7 @@ All three Sanity Checks have passed!
 Since our experiment has passed the sanity checks, let's see if the evaluation metrics are statistically and practically significant.
 
 Getting the totals:
+
 ```
 Gross Conversion:
     Total clicks (control).......... 17293
@@ -218,7 +221,7 @@ Net Conversion:
 
 For Gross Conversion, we want a statistically significant and practically significant *decrease*, which is what the calculations show. Zero is not a part of the confidence interval, and the upper bound is past the practical significance boundary. So Gross Conversion has PASSED.
 
-For Net Conversion, however, the situation is a bit tricky. We wanted the experiment to *not have* a significant decrease, which means that its definition of practical significance includes staying the same (i.e. no statistically significant difference in net conversion), or an increase. The calculations show that there is no statistical significant difference in net conversion, however the upper and lower bounds of the 95% confidence interval are both past the boundary for practical significance. This means that any interpretation of the data will be uncertain, and we do not have enough statistical power to draw a strong conclusion.
+For Net Conversion, however, the situation is a bit tricky. We wanted the experiment to *not have* a significant decrease, which means that its definition of practical significance includes staying the same (i.e. no statistically significant difference in net conversion), or an increase. The calculations show that there is no statistical significant difference in net conversion, however the lower bound of the 95% confidence interval is past the boundary for practical significance. This means that any interpretation of the data will be uncertain, and we do not have enough statistical power to draw a strong conclusion.
 
 #### Sign Tests
 
@@ -244,26 +247,26 @@ Net Conversion:
 
 #### Summary
 
-The Bonferroni correction was not used because the two evaluation metrics are co-related, and hence would have produced a conservative estimate. Also since there are only two metrics, the chances of a rare event occurring are not increased by a lot.
+The Bonferroni correction was not used because we want *both* the evaluation metrics to pass in order to launch. The Bonferroni correction is useful in reducing Type I errors (i.e. when any metric can pass in order to launch), and not necessarily effective in reducing Type II errors (what we're dealing with).
 
-Both the Effect Size Tests and Sign Tests have produced congruent results, both deeming Gross Conversion to be statistically significant and Net Conversion statistically insignificant. Additionally, the Effect Size Tests have also shown that Gross Conversion is practically significant, but Net Conversion is not.
+Both the Effect Size Tests and Sign Tests have produced congruent results, both deeming Gross Conversion to be statistically significant and Net Conversion statistically insignificant. Additionally, the Effect Size Tests have also shown that Gross Conversion is practically significant, but Net Conversion is not because the lower bound of the 95% confidence interval is past the boundary for practical significance.
 
 ### Recommendation
 
-The experiment has caused Gross Conversion to significantly decrease both statistically and practically, which means it has succeeded in its first aspect which was to warn students about the course load so that they may reconsider joining the free trial, thereby freeing up coaching resources to students who are more likely to pay for the course. However, we are uncertain whether the experiment has had a significant decrease in Net Conversion or not, and for that reason, I recommend to **NOT LAUNCH** this experiment now, and instead create additional tests to determine whether Net Conversion has significantly decreased or not. Launching this experiment might cause a decrease in revenue from students paying for courses, and thus too risky a change. If it is not feasible to run more experiments and a decision must be made, I'd recommend seeking a business analyst to check whether the cost of the possible chance of lower number student payments is made up by the decrease in expenditure for the coaching resources.
+The experiment has caused Gross Conversion to significantly decrease both statistically and practically, which means it has succeeded in its first aspect which was to warn students about the course load so that they may reconsider joining the free trial, thereby freeing up coaching resources to students who are more likely to pay for the course. However, we are uncertain whether the experiment has had a significant decrease in Net Conversion or not, and for that reason, I recommend to **NOT LAUNCH** this experiment now, and instead create additional tests to determine whether Net Conversion has significantly decreased or not. Since the confidence interval of Net Conversion does include the negative of the practical significance boundary, launching this experiment might cause a decrease in revenue from students paying for courses, and thus too risky a change. If it is not feasible to run more experiments and a decision must be made, I'd recommend seeking a business analyst to check whether the cost of the possible chance of lower number student payments is made up by the decrease in expenditure for the coaching resources.
 
 ## Follow-Up Experiment
 
-A simple follow up experiment would be to play a short video to users who click the "Start Free Trial" button instead of the '5 hrs/week' screener. The rationale behind this is that a simple '5 hrs/week' might be logically sound, but doesn't *feel* like a lot of effort and doesn't convey the commitment required. For example, I might express 'Getting a Toned Body' as something that can be done with 6 hours per week, but it's evident, especially for those who have tried, that it takes a lot more effort than that. Not in terms of putting more hours, but in terms of putting those hours consistently for an extended period of time. So that's what I want to articulate to users planning on starting the course through the video: that it's going to take commitment to complete it.
+It's quite difficult to come up with a unique and transformative experiment for Udacity considering all the good ones have already been done. I particularly like the P0 mini-project idea because, as a student, I adore and applaud the effort put into the Project Review. I think it's what makes Udacity stand out, and if someone entering the free trial has the opportunity to submit a project and experience this, it will increase their chances of paying and completing the course. Along with that, the financial incentives should be effective too.
 
-The video should be short - less than a minute long - so that it's not a drag. Content-wise, the video should express the exciting coursework and worthwhile challenges the students will face over said extended amount of time (4 months to a year depending on effort put): a short overview of the topics and projects presented by the various course instructors. More importantly, the video must contain success stories of students who have completed said course and then gone on to advance their careers. This is extremely important - crucial, I might add - because the students need a goal, or a reward, to incentivize them to put in the effort. Like with the fitness program the reward for the effort would be a toned body, there needs to be a significant reward that the students desire. A video alternating between course content and students who have completed the course and are now working in top companies might inspire students to not only take on the challenge, but see it through.
+My idea for an experiment would be to provide an option of attending an online meeting between a representative of any corresponding hiring partner and the student enrolling. With online learning, particularly for those who do not have access to UConnect or cannot join the Nanodegree Plus, I think it's important to establish a social connection to provide the emotional motivation needed to complete the program. By making the meeting with a hiring partner, Udacity can establish a direct line between potential employee and employer right from the go. This should hopefully inspire students, especially entry-level ones and those looking for a career change, to complete the course.     
 
-**Hypothesis**: The Net Conversion will increase because the video will set clear goals and inspire students to complete the course.
+**Hypothesis**: The Retention will increase because the meeting will show that program is worth the effort and inspire students to complete the course.
 
-**Unit of Diversion**: Cookies.
+**Unit of Diversion**: User-Id. This change only impacts those who have enrolled in the program and subsequently made an account.
 
-**Invariant Metrics**: Number of cookies; Number of clicks; Click-through-probability.
+**Invariant Metrics**: Number of User-Ids. This should not change over both the control and experiment groups as there is nothing that is affecting their enrollment into the program.
 
-**Evaluation Metrics**: Net Conversion
+**Evaluation Metrics**: Retention. The meeting can hopefully increase the number of users who continue past the 14-day free trial and make a payment, provided that they have entered the free trial period.
 
-The **unit of diversion** and the **invariant** and **evaluation metrics** are the same as the experiment analyzed above because it is similar in its purpose.
+* *The practical significance boundary should be higher than the experiment that was just analyzed because the follow-up experiment will be more expensive and more difficult to organize. In case it is unfeasible business- or logistics-wise, I would change online meeting to personalized e-mails.*
