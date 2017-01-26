@@ -143,7 +143,7 @@ Click-through-probability:
     Pooled CTP..................... 0.082154
 ```
 
-[Click here](https://i.imgsafe.org/8ebd8ef747.jpg) to see a sample calculation for finding the 95% confidence intervals.
+[Click here](https://i.imgsafe.org/a166078e57.jpg) to see a sample calculation for finding the 95% confidence intervals.
 
 ```
 Number of cookies:
