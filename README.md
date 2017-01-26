@@ -271,4 +271,6 @@ My idea for an experiment would be to provide an option of attending an online m
 * Retention: The meeting can hopefully increase the number of users who continue past the 14-day free trial and make a payment, provided that they have entered the free trial period.
 * Attendance: The number of user-ids that attended the meeting divided by the number of user-ids that had the opportunity (or total number of user-ids in experiment group). This is used to see whether the students are actually using the service that is provided, so that there is context to Retention. We want this number to be high.
 
-* *The practical significance boundary should be higher than the experiment that was just analyzed because the follow-up experiment will be more expensive and more difficult to organize. In case it is unfeasible business- or logistics-wise, I would change online meeting to personalized e-mails.*
+
+
+*The practical significance boundary should be higher than the experiment that was just analyzed because the follow-up experiment will be more expensive and more difficult to organize. In case it is unfeasible business- or logistics-wise, I would change online meeting to personalized e-mails.*
